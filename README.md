@@ -1,2 +1,2 @@
 # CopyPercentage-RN
-CopyPercentage make from React-native
+CopyPercentage make from React-native(expo)
