@@ -44,7 +44,7 @@ export default function CopyPercentage() {
         try {
             await FileSystem.copyAsync({ //檔案複製
                 from: fileUri, //來源路徑
-                to: destUr,   //儲存路徑
+                to: destUri,   //儲存路徑
                 progressCallback: (data) => { //更新複製進度precent
                     const newPercentage = Math.floor(
                         (data.totalBytesWritten / data.totalBytesExpectedToWrite) * 100
