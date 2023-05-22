@@ -33,31 +33,50 @@ export default function CopyPercentage() {
     };
 
     const copyFile = async () => {
-        if (!fileUri) { // 如果fileUri是空的
+        if (!fileUri) {  // 如果fileUri是空的
             Alert.alert('錯誤', '請先選擇檔案');
             return;
         }
 
-        const fileName = fileUri.split('/').pop();
+        const fileName = fileUri.split('/').pop(); //取得檔案名稱
         const destUri = `${FileSystem.documentDirectory}${fileName}`; //儲存路徑
 
         try {
-            await FileSystem.copyAsync({ //檔案複製
-                from: fileUri, //來源路徑
-                to: destUri,   //儲存路徑
-                progressCallback: (data) => { //更新複製進度precent
-                    const newPercentage = Math.floor(
-                        (data.totalBytesWritten / data.totalBytesExpectedToWrite) * 100
-                    );
-                    setPercentage(newPercentage);
-                },
-            });
+            const { size } = await FileSystem.getInfoAsync(fileUri); //取得檔案大小
+            const fileSize = size;
+            const chunkSize = 1024 * 1024; // 每次複製 1MB
+            const totalChunks = Math.ceil(fileSize / chunkSize); //chunk 數量
 
-            setPercentage(100);
+            let copiedChunks = 0;
+
+            const copyChunk = async (start, end) => { //進度百分比更新和複製檔案
+                await FileSystem.copyAsync({ //檔案複製
+                    from: fileUri, //來源路徑
+                    to: destUri,   //儲存路徑
+                    fromOffset: start,
+                    length: end - start,
+                });
+                copiedChunks++;
+                const newPercentage = Math.floor((copiedChunks / totalChunks) * 100);
+                setPercentage(newPercentage);
+            };
+
+            const copyChunks = async () => {  //處理多個 chunks 同時複製
+                const promises = [];
+                for (let i = 0; i < totalChunks; i++) {
+                    const start = i * chunkSize;
+                    const end = Math.min((i + 1) * chunkSize, fileSize);
+                    promises.push(copyChunk(start, end));
+                }
+                await Promise.all(promises);
+            };
+
+            await copyChunks();
+
             Alert.alert('成功', '檔案複製成功');
 
-            if (Platform.OS === 'ios') {
-                const path = `${FileSystem.documentDirectory}${fileName}`;  //儲存路徑
+            if (Platform.OS === 'ios') { //快取儲存備份
+                const path = `${FileSystem.documentDirectory}${fileName}`; //儲存路徑
                 const destination = `${FileSystem.cacheDirectory}${fileName}`; //快取儲存路徑
 
                 await FileSystem.copyAsync({
