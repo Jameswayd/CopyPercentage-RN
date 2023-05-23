@@ -1,6 +1,7 @@
 {
   "expo": {
-    "name": "copy",
+    "name": "copypercentage",
+    "description": "copy percentage bar",
     "slug": "copy",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,7 +16,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jameswayd.copyPercentage"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,6 +27,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a10ed8ef-a883-45ba-9dae-b0a5c2891d2a"
+      }
     }
   }
 }
