@@ -10,6 +10,8 @@ CopyPercentage make from React-native(expo)
     "react-native-fs": "^2.20.0"
 # Usage instructions
 This is a simple program with the goal of allowing us to access the main screen and choose the files we want to copy. We will be able to see the actual path of the selected file and a progress bar indicating the copying progress. Finally, we will find the copied data in both the documentDirectory and cacheDirectory.
+
+https://expo.dev/@jameswayd/copy?serviceType=classic&distribution=expo-go
 # Usage photo
 ## Homescreen
 ![Homescreen](https://github.com/Jameswayd/CopyPercentage-RN/blob/master/Usage%20photo/Home%20screen.png)
